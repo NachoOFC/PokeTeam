@@ -21,3 +21,6 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
 Route::post('verificar-email', [RegisterController::class, 'verificarEmail']);
+
+Route::post('edit-perfil', [editperfilController::class, 'editperfil']);
+

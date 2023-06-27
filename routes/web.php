@@ -25,3 +25,12 @@ Route::get('/register', function () {
 Route::get('/login', function () {
     return view('index.login');
 });
+
+Route::get('/editperfil', function () {
+    return view('index.editperfil');
+});
+
+Route::post('/editperfil', 'editperfilController@store')->name('avatars.store');
+
+Route::post('user/update/password', 'editperfilController@update')->name('user.update');
+
