@@ -1,37 +1,54 @@
-@extends('layouts.app')
+@extends('Layouts.app')
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+
+
+            $("#form-login").submit(function() {
+                event.preventDefault();
+
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: 'http://infst2.test/api/login',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // La autenticación fue exitosa
+                        alert('Inicio de sesión correcto');
+                        // Redirigir a la página deseada
+                    },
+                    error: function(response) {
+                        // Error en la autenticación
+                        alert(
+                            'Las credenciales proporcionadas no coinciden con nuestros registros.');
+                    }
+                });
+
+
+
+            });
+
+        });
+    </script>
+@endsection
 
 @section('content')
-    <div class="login-container">
-        <div class="login-header">
-            <h1>Iniciar sesión</h1>
-        </div>
-        <div class="login-body">
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
+    <div class="row justify-content-center">
+        <div class="col-lg-6 my-4">
+            <h1>Formulario login</h1>
+            <form id="form-login">
                 <div class="form-group">
-                    <label for="email">Correo electrónico</label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese su email">
                 </div>
-
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input id="password" type="password" name="password" required>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="Ingrese su contraseña">
                 </div>
-
-                <div class="form-group">
-                    <button type="submit">Iniciar sesión</button>
-                </div>
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <button type="submit" id="bt-guardar" class="btn btn-success btn-block my-2">Iniciar sesion</button>
             </form>
         </div>
     </div>
