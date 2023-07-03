@@ -29,22 +29,21 @@ class RegisterController extends Controller
         return response($user, Response::HTTP_OK);
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required']
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        if(Auth::attempt($credentials)){
-            $user = Auth::user();
-            $token = $user->createToken('token')->plainTextToken;
-            $cookie = cookie('cookie_token', $token, 60*24);
-            return response(["token"=>$token], Response::HTTP_OK)->withoutCookie($cookie);
-        } else {
-            return response(["Message" => "Las credenciales no son válidas"],Response::HTTP_UNAUTHORIZED);
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            Auth::login($user);
+            return redirect()->intended('dashboard');
         }
 
+        return redirect('login')->withErrors([
+            'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
+        ]);
     }
 
     public function verificarEmail(Request $request)
